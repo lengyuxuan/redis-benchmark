@@ -8,18 +8,28 @@ const redisClientEnable = new Redis({ enableAutoPipelining: true });
 suite.add('redis@default', {
   defer: true,
   fn: function (deferred) {
-    redisClient.get('xxx', () => {
-      deferred.resolve();
-    });
+    let n = 0;
+    for (let i = 0; i < 500; i ++) {
+      redisClient.get('xxx', () => {
+        if (++n === 500) {
+          deferred.resolve();
+        }
+      });
+    }
   }
 });
 
 suite.add('redis@enable', {
   defer: true,
   fn: function (deferred) {
-    redisClientEnable.get('xxx', () => {
-      deferred.resolve();
-    });
+    let n = 0;
+    for (let i = 0; i < 500; i ++) {
+      redisClientEnable.get('xxx', () => {
+        if (++n === 500) {
+          deferred.resolve();
+        }
+      });
+    }
   }
 });
 
